@@ -6,12 +6,10 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.chaosenterprise.speed.Configurations;
 import com.chaosenterprise.speed.persistence.PersistenceFactory;
 
-@Component
 public class ProviderFactory {
 
 	private static final Logger log = LoggerFactory.getLogger(ProviderFactory.class);
