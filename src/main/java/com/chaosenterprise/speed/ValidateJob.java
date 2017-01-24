@@ -27,7 +27,7 @@ public class ValidateJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		log.info("Starting tests");
+		log.trace("Starting tests");
 
 		Configurations configurations = (Configurations) context.getJobDetail()
 																.getJobDataMap()
@@ -41,20 +41,20 @@ public class ValidateJob implements Job {
 		List<Persistence> persistences = PersistenceFactory.getConfiguredPersistences(configurations);
 
 		try {
-			log.info("Removing providers that aren't reachable");
+			log.debug("Removing providers that aren't reachable");
 			providers.stream()
 						.filter(Provider::testConnection);
 
 			providers.stream()
 						.forEach(Provider::runTest);
 
-			log.info("Getting test results");
+			log.debug("Getting test results");
 
 			List<TestData> testResults = providers.stream()
 													.map(Provider::getTestResult)
 													.collect(Collectors.toList());
 
-			log.info("Persisting test results");
+			log.debug("Persisting test results");
 			if (persistences == null) {
 				return;
 			}
@@ -67,7 +67,7 @@ public class ValidateJob implements Job {
 						.forEach(Provider::close);
 		}
 
-		log.info("Finished tests");
+		log.trace("Finished tests");
 
 	}
 
