@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ConfigurationUtil {
 
-	private static final String propertyFile = "speed-validation.json";
+	private static final String propertyFile = "speed-validation-properties.json";
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
