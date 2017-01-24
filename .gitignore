@@ -26,3 +26,4 @@ nbdist/
 /bin/
 speed-validation.json
 speed-validation.csv
+speed-vadiation.log
