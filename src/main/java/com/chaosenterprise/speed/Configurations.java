@@ -26,7 +26,7 @@ public class Configurations {
 	private String cron = "0 0/30 * 1/1 * ? *";
 
 	@JsonProperty("Debug")
-	private Boolean debug = false;
+	private Boolean debug = true;
 
 	public Boolean getDebug() {
 		return debug;

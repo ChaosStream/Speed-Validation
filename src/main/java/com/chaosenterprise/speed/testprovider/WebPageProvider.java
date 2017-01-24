@@ -31,7 +31,6 @@ public abstract class WebPageProvider implements Provider {
 	public WebDriver getWebDriver() {
 		if (webDriver == null) {
 			System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
-			System.setProperty("webdriver.firefox.bin", "src/main/resources/geckodriver.exe");
 			try {
 				webDriver = new ChromeDriver();
 
@@ -52,8 +51,8 @@ public abstract class WebPageProvider implements Provider {
 
 	@Override
 	public void runTest() {
-		log.warn("Starting {}", this.getClass()
-									.getName());
+		log.trace("Starting {}", this.getClass()
+										.getName());
 
 		getWebDriver().get(getUrl());
 
@@ -84,16 +83,16 @@ public abstract class WebPageProvider implements Provider {
 	}
 
 	protected void waitForResults() {
-		log.warn("Waiting for result tag {}", getResultsTag());
+		log.debug("Waiting for result tag {}", getResultsTag());
 		new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(getResultsTag()));
-		log.warn("Found result tag {}", getResultsTag());
+		log.debug("Found result tag {}", getResultsTag());
 	}
 
 	protected void startTest() {
-		log.warn("Clicking start tag {}", getStartTag());
+		log.debug("Clicking start tag {}", getStartTag());
 		WebElement button = new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(getStartTag()));
 		button.click();
-		log.warn("Start tag clicked");
+		log.debug("Start tag clicked");
 	}
 
 	abstract protected String getUrl();

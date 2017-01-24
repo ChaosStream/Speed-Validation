@@ -49,9 +49,9 @@ public class SpeedTest extends WebPageProvider {
 
 	@Override
 	protected void waitForResults() {
-		log.warn("Waiting for result tag {}", getResultsTag());
+		log.debug("Waiting for result tag {}", getResultsTag());
 		new WebDriverWait(getWebDriver(), 120).until(ExpectedConditions.textMatches(getResultsTag(), Pattern.compile("\\w+")));
-		log.warn("Found result tag {}", getResultsTag());
+		log.debug("Found result tag {}", getResultsTag());
 	}
 
 }
