@@ -5,11 +5,13 @@ import java.util.Date;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.chaosenterprise.speed.testprovider.Providers;
+
 public class SpeedTestData implements TestData {
 
 	private Date date = new Date();
 
-	private String source = "SpeedTest";
+	private Providers source = Providers.SpeedTest;
 
 	@FindBy(xpath = "//span[contains(@class,'upload-speed')]")
 	private WebElement upload;
@@ -57,7 +59,7 @@ public class SpeedTestData implements TestData {
 	}
 
 	@Override
-	public String getSource() {
+	public Providers getSource() {
 		return source;
 	}
 }

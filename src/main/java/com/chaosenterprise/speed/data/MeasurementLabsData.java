@@ -7,12 +7,14 @@ import lombok.ToString;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import com.chaosenterprise.speed.testprovider.Providers;
+
 @ToString
 public class MeasurementLabsData implements TestData {
 
 	private Date date = new Date();
 
-	private String source = "MeasurementLabs";
+	private Providers source = Providers.MeasurementLabs;
 
 	@FindBy(id = "upload-speed")
 	private WebElement upload;
@@ -63,7 +65,7 @@ public class MeasurementLabsData implements TestData {
 	}
 
 	@Override
-	public String getSource() {
+	public Providers getSource() {
 		return source;
 	}
 

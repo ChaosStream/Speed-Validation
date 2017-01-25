@@ -2,6 +2,8 @@ package com.chaosenterprise.speed.data;
 
 import java.util.Date;
 
+import com.chaosenterprise.speed.testprovider.Providers;
+
 public interface TestData {
 
 	public String getUpload();
@@ -16,6 +18,6 @@ public interface TestData {
 
 	public Date getDate();
 
-	public String getSource();
+	public Providers getSource();
 
 }

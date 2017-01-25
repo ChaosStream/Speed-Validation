@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script th:inline="javascript">
+
+	    google.charts.load('current', {'packages':['line', 'corechart', 'scatter']});
+	    google.charts.setOnLoadCallback(drawChart);
+
+	    var json = {
+	    	       "cols": [
+	   	               {
+		    	         "id": "",
+		    	         "label": "DateTime",
+		    	         "pattern": "",
+		    	         "type": "datetime"
+		    	       }, {
+		    	         "id": "",
+		    	         "label": "Upload",
+		    	         "pattern": "",
+		    	         "type": "number"
+		    	       }, {
+		    	         "id": "",
+		    	         "label": "Download",
+		    	         "pattern": "",
+		    	         "type": "number"
+		    	       }
+	    	       ],
+	    	       "rows": [
+	    	          [# th:each="data : ${jsonData}"]
+	    	            {"c":[{"v":new Date([[${data.getDate()}]])},{"v":[[${data.getUpload()}]],"f":null}, {"v":[[${data.getDownload()}]],"f":null}, {"v":[[${data.getSource()}]],"f":null}]},
+	    	          [/]
+	    	       ]
+	    	     };
+    
+     
+    
+	   	function drawChart() {
+	
+	   	   drawLineChart($.extend(true, {}, json));
+	   	   drawScatterChart($.extend(true, {}, json));
+	   	 }
+	
+	   	 function drawLineChart(jsonData) {
+	   	   var data = new google.visualization.DataTable(jsonData);
+	
+	   	   var lineChart = new google.charts.Line(document.getElementById('chart_div'));
+	
+	   	   var options = {
+	   	     title: 'SpeedTest',
+	
+	   	     series: {
+	   	       0: {
+	   	         axis: 'Upload'
+	   	       },
+	   	       1: {
+	   	         axis: 'Download'
+	   	       }
+	   	     },
+	   	     axes: {
+	   	       y: {
+	   	         Upload: {
+	   	           label: 'Upload Mb/s'
+	   	         },
+	   	         Download: {
+	   	           label: 'Download Mb/s'
+	   	         }
+	   	       }
+	   	     }
+	   	   };
+	
+	
+	
+	   	   lineChart.draw(data, options);
+	   	 }
+	
+	   	 function drawScatterChart(jsonData) {
+	   	   removeColumns(jsonData, ["DateTime"])
+	
+	   	   var data = new google.visualization.DataTable(jsonData);
+	   	   var scatterChart = new google.charts.Scatter(document.getElementById('scatter_chart_div'));
+	
+	   	   var options = {
+	   	     title: 'SpeedTest',
+	   	     width: 800,
+	   	     height: 500,
+	   	     hAxis: {
+	   	       title: 'Upload',
+	   	       minValue: 0,
+	   	       format: 'decimal'
+	   	     },
+	   	     vAxis: {
+	   	       title: 'Download',
+	   	       minValue: 0,
+	   	       format: 'decimal'
+	   	     },
+	   	   };
+	   	   scatterChart.draw(data, google.charts.Scatter.convertOptions(options));
+	
+	   	 }
+	
+	
+	   	 function removeColumns(jsonData, colsToRemove) {
+	
+	   	   var indexs = [];
+	   	   for (var i = 0; i < jsonData.cols.length; i++) {
+	   	     if ($.inArray(jsonData.cols[i].label, colsToRemove) > -1) {
+	   	       indexs.push(i);
+	   	       jsonData.cols.splice(i, 1);
+	
+	   	     }
+	   	   }
+	   	   jsonData.cols.length = jsonData.cols.length - indexs.length + 1;
+	   	   cleanupRows(jsonData, indexs);
+	   	 }
+	
+	   	 function cleanupRows(jsonData, cols) {
+	   	   for (var k = 0; k < jsonData.rows.length; k++) {
+	   	     cols.forEach(function(i) {
+	   	       jsonData.rows[k].c.splice(i, 1);
+	
+	   	     });
+	   	     jsonData.rows[k].c.length = jsonData.rows[k].c.length - cols.length + 1;
+	
+	   	   }
+	   	 }
+
+
+
+
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the column chart-->
+    <div id="chart_div"></div>
+    <div id="scatter_chart_div"></div>
+  </body>
+</html>
