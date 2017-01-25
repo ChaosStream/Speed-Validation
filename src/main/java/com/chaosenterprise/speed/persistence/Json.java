@@ -1,6 +1,5 @@
 package com.chaosenterprise.speed.persistence;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.chaosenterprise.speed.data.TestData;
+import com.chaosenterprise.speed.testprovider.Providers;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Json implements Persistence {
+public class Json extends FilePersistence {
 
-	private static final Logger log = LoggerFactory.getLogger(PersistenceFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(Json.class);
 
 	private static final String fileName = "speed-validation.json";
 
@@ -31,7 +31,7 @@ public class Json implements Persistence {
 		// mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
 		try {
-			JsonData jsonData = loadJsonData();
+			JsonData jsonData = loadJsonData(getFileName());
 
 			if (jsonData != null && jsonData.data == null) {
 				jsonData.data = new ArrayList<Data>();
@@ -39,28 +39,25 @@ public class Json implements Persistence {
 
 			jsonData.data.add(new Data(testData));
 
-			mapper.writeValue(getFile(), jsonData);
+			mapper.writeValue(getFile(getFileName()), jsonData);
 		} catch (IOException e) {
 			log.error(e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 	}
 
-	private JsonData loadJsonData() {
+	protected JsonData loadJsonData(String fileName) {
 		try {
-			return mapper.readValue(getFile(), JsonData.class);
+			return mapper.readValue(getFile(fileName), JsonData.class);
 		} catch (IOException e) {
 			log.warn("IOException found {}", e.getLocalizedMessage());
 			return new JsonData();
 		}
 	}
 
-	private File getFile() throws IOException {
-		File file = new File(fileName);
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		return file;
+	@Override
+	String getFileName() {
+		return fileName;
 	}
 
 	@JsonInclude(JsonInclude.Include.ALWAYS)
@@ -77,6 +74,10 @@ public class Json implements Persistence {
 		public JsonData(@JsonProperty("data") List<Data> data) {
 			this.data = data;
 		}
+
+		public List<Data> getData() {
+			return data;
+		}
 	}
 
 	@JsonInclude(JsonInclude.Include.ALWAYS)
@@ -86,7 +87,7 @@ public class Json implements Persistence {
 		private Date date;
 
 		@JsonProperty("source")
-		private String source;
+		private Providers source;
 
 		@JsonProperty("upload")
 		private Double upload;
@@ -108,7 +109,7 @@ public class Json implements Persistence {
 		}
 
 		@JsonCreator
-		public Data(@JsonProperty("date") Date date, @JsonProperty("source") String source, @JsonProperty("upload") Double upload, @JsonProperty("uploadUnits") String uploadUnits, @JsonProperty("download") Double download,
+		public Data(@JsonProperty("date") Date date, @JsonProperty("source") Providers source, @JsonProperty("upload") Double upload, @JsonProperty("uploadUnits") String uploadUnits, @JsonProperty("download") Double download,
 				@JsonProperty("downloadUnits") String downloadUnits, @JsonProperty("latency") Long latency) {
 			super();
 			this.date = date;
@@ -129,6 +130,51 @@ public class Json implements Persistence {
 			this.downloadUnits = testData.getDownloadUnits();
 			this.latency = Long.valueOf(testData.getLatency());
 		}
+
+		public Date getDate() {
+			return date;
+		}
+
+		public Providers getSource() {
+			return source;
+		}
+
+		public Double getUpload() {
+			return upload;
+		}
+
+		public String getUploadUnits() {
+			return uploadUnits;
+		}
+
+		public Double getDownload() {
+			return download;
+		}
+
+		public String getDownloadUnits() {
+			return downloadUnits;
+		}
+
+		public Long getLatency() {
+			return latency;
+		}
+
+		public void setUpload(Double upload) {
+			this.upload = upload;
+		}
+
+		public void setUploadUnits(String uploadUnits) {
+			this.uploadUnits = uploadUnits;
+		}
+
+		public void setDownload(Double download) {
+			this.download = download;
+		}
+
+		public void setDownloadUnits(String downloadUnits) {
+			this.downloadUnits = downloadUnits;
+		}
+
 	}
 
 }

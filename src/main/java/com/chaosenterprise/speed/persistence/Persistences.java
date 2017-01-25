@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum Persistences {
 
-	CSV("CSV"), Json("Json");
+	CSV("CSV"), Json("Json"), Chart("Chart");
 
 	private String clazz;
 

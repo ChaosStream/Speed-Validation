@@ -1,15 +1,12 @@
 package com.chaosenterprise.speed.persistence;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import com.chaosenterprise.speed.data.TestData;
 
-public class CSV implements Persistence {
+public class CSV extends FilePersistence {
 
-	String fileName = "speed-validation.csv";
+	private String fileName = "speed-validation.csv";
 
 	public CSV() {
 	}
@@ -20,31 +17,16 @@ public class CSV implements Persistence {
 
 	@Override
 	public void save(TestData testData) {
-		BufferedWriter bw = null;
-		FileWriter fw = null;
-
 		try {
-			File file = new File(fileName);
-
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			fw = new FileWriter(file.getAbsoluteFile(), true);
-			bw = new BufferedWriter(fw);
-
-			bw.write(format(testData));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (bw != null)
-					bw.close();
-				if (fw != null)
-					fw.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			writeToFile(format(testData), true);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+
+	}
+
+	@Override
+	String getFileName() {
+		return fileName;
 	}
 }
