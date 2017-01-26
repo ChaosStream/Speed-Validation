@@ -1,5 +1,6 @@
 package com.chaosenterprise.speed;
 
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.ToString;
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Configurations {
 
 	@JsonProperty(value = "Providers")
-	private List<Providers> providers = Providers.asList();
+	private List<Providers> providers = Arrays.asList(Providers.MeasurementLabs);
 
 	@JsonProperty(value = "Persistences")
 	private List<Persistences> persistences = Persistences.asList();

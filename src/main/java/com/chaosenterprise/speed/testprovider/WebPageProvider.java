@@ -30,7 +30,6 @@ public abstract class WebPageProvider implements Provider {
 
 	public WebDriver getWebDriver() {
 		if (webDriver == null) {
-			System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
 			try {
 				webDriver = new ChromeDriver();
 
@@ -79,7 +78,8 @@ public abstract class WebPageProvider implements Provider {
 
 	@Override
 	public void close() {
-		webDriver.quit();
+		if (webDriver != null)
+			webDriver.quit();
 	}
 
 	protected void waitForResults() {

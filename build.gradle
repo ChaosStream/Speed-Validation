@@ -6,10 +6,21 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
+
+
+mainClassName = "com.chaosenterprise.speed.SpeedValidation"
 
 jar {
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
 	baseName = 'speed-validation'
 	version = '0.0.1-SNAPSHOT'
+	manifest {
+        attributes("Implementation-Title": baseName,
+                   "Implementation-Version": version, 
+					"Main-Class": mainClassName)
+    }
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -22,14 +33,9 @@ dependencies {
 	compile group: 'org.projectlombok', name: 'lombok', version: '1.16.12'
 	compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.0.1'
 	compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
-	compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
 	compile group: 'log4j', name: 'log4j', version: '1.2.17'
-	compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.3.RELEASE'
-
-	
-	
-	
-	
+	compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.3.RELEASE'	
 }
